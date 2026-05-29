@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude Prompt Library — QA Team</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#F7F8FC;color:#1A1A2E;min-height:100vh;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:#F0F0F0;}::-webkit-scrollbar-thumb{background:#C4C4D4;border-radius:3px;}
+
+/* ── CATEGORY COLORS ─────────────────────────── */
+.col-tc    {--cc:#E55A2B;--cl:#FFF0EB;--cb:rgba(229,90,43,0.12);}
+.col-d365  {--cc:#7C3AED;--cl:#F5F3FF;--cb:rgba(124,58,237,0.12);}
+.col-sf    {--cc:#0284C7;--cl:#F0F9FF;--cb:rgba(2,132,199,0.12);}
+.col-ado   {--cc:#0D9488;--cl:#F0FDFA;--cb:rgba(13,148,136,0.12);}
+.col-def   {--cc:#E11D48;--cl:#FFF1F2;--cb:rgba(225,29,72,0.12);}
+.col-pbi   {--cc:#16A34A;--cl:#F0FDF4;--cb:rgba(22,163,74,0.12);}
+.col-doc   {--cc:#6B7280;--cl:#F9FAFB;--cb:rgba(107,114,128,0.10);}
+
+/* ── HERO ────────────────────────────────────── */
+.hero{background:linear-gradient(135deg,#E55A2B 0%,#C2185B 35%,#7C3AED 70%,#0D9488 100%);padding:3rem 2rem 2.5rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.18);}
+.hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:5px 14px;font-size:11px;color:#fff;font-weight:700;letter-spacing:1px;margin-bottom:1.25rem;backdrop-filter:blur(6px);}
+.hero h1{font-size:clamp(24px,3.5vw,38px);font-weight:800;color:#fff;line-height:1.2;margin-bottom:.75rem;}
+.hero h1 span{color:#FFD580;}
+.hero p{font-size:15px;color:rgba(255,255,255,0.88);max-width:580px;line-height:1.65;margin-bottom:2rem;}
+.hero-stats{display:flex;flex-wrap:wrap;gap:1.5rem;}
+.hstat{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:12px;padding:.65rem 1.1rem;backdrop-filter:blur(6px);}
+.hstat-v{font-size:22px;font-weight:800;color:#fff;display:block;}
+.hstat-l{font-size:11px;color:rgba(255,255,255,0.78);margin-top:1px;display:block;}
+
+/* ── ONBOARDING ──────────────────────────────── */
+.onboard{background:linear-gradient(135deg,#FFF8F5,#F5F0FF);border-bottom:3px solid #E55A2B;padding:2rem;text-align:center;}
+.onboard.hidden{display:none;}
+.ob-title{font-size:20px;font-weight:700;color:#1A1A2E;margin-bottom:.5rem;}
+.ob-sub{font-size:14px;color:#5A5A7A;max-width:540px;margin:0 auto 1.5rem;line-height:1.6;}
+.ob-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:1.5rem;}
+.ob-step{background:#fff;border:2px solid #E8E8F0;border-radius:12px;padding:1rem;width:200px;text-align:left;}
+.ob-step-n{width:28px;height:28px;border-radius:50%;font-size:13px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:8px;}
+.ob-step h3{font-size:12.5px;font-weight:700;color:#1A1A2E;margin-bottom:3px;}
+.ob-step p{font-size:11.5px;color:#6B6B8A;line-height:1.5;}
+.fill-eg{color:#C05621;font-weight:700;}
+.ob-example{background:#fff;border:2px solid #E8E8F0;border-radius:12px;padding:1rem 1.5rem;max-width:680px;margin:0 auto 1.25rem;text-align:left;}
+.ob-ex-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:#9090AA;margin-bottom:8px;}
+.ob-ex-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;}
+.ob-ex-box{background:#FFF8F5;border:1px solid #FCD0BB;border-radius:8px;padding:9px 11px;font-size:11.5px;line-height:1.55;color:#4A3A2E;}
+.ob-ex-arr{font-size:22px;color:#E55A2B;text-align:center;}
+.ob-ex-out{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:9px 11px;font-size:11.5px;line-height:1.55;color:#14532D;}
+.ob-btn{background:linear-gradient(135deg,#E55A2B,#C2185B);color:#fff;border:none;border-radius:10px;padding:10px 28px;font-size:14px;font-weight:700;cursor:pointer;}
+.ob-btn:hover{opacity:.9;}
+
+/* ── NAV ─────────────────────────────────────── */
+nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #E8E8F4;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.nav-inner{max-width:1200px;margin:0 auto;height:58px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 1.5rem;}
+.nav-logo{display:flex;align-items:center;gap:9px;}
+.logo-pill{background:linear-gradient(135deg,#E55A2B,#7C3AED);width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.nav-title{font-size:15px;font-weight:700;color:#1A1A2E;}
+.nav-title span{color:#E55A2B;}
+.nav-right{display:flex;align-items:center;gap:6px;}
+.nbtn{background:none;border:1.5px solid #E0E0EC;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:600;color:#5A5A7A;cursor:pointer;transition:all .18s;white-space:nowrap;}
+.nbtn:hover{background:#F5F0FF;border-color:#7C3AED;color:#7C3AED;}
+.nbtn.hot{background:linear-gradient(135deg,#FFF0EB,#F5F0FF);border-color:#E55A2B;color:#E55A2B;}
+
+/* ── TOOLBAR ─────────────────────────────────── */
+.toolbar{max-width:1200px;margin:0 auto;padding:1.25rem 1.5rem .5rem;}
+.srch-wrap{position:relative;margin-bottom:12px;}
+.srch-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#9090AA;}
+#search{width:100%;background:#fff;border:2px solid #E0E0EC;border-radius:12px;padding:11px 13px 11px 40px;font-size:14px;color:#1A1A2E;outline:none;transition:border .2s;}
+#search::placeholder{color:#B0B0C4;}
+#search:focus{border-color:#E55A2B;box-shadow:0 0 0 3px rgba(229,90,43,.08);}
+.kbd-hint{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:#F0F0F8;border:1px solid #E0E0EC;border-radius:5px;padding:2px 7px;font-size:10.5px;color:#9090AA;}
+.cats{display:flex;flex-wrap:wrap;gap:6px;}
+.cbt{display:flex;align-items:center;gap:5px;background:#fff;border:2px solid #E0E0EC;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:#5A5A7A;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.cbt:hover{border-color:#C4C4D4;background:#F8F8FE;}
+.cbt.active-all{background:linear-gradient(135deg,#E55A2B,#7C3AED);color:#fff;border-color:transparent;}
+
+/* ── MAIN ────────────────────────────────────── */
+main{max-width:1200px;margin:0 auto;padding:1.25rem 1.5rem 4rem;}
+.res-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
+.res-count{font-size:13px;color:#6B6B8A;}
+.res-count strong{color:#1A1A2E;font-weight:700;}
+.sort-sel{background:#fff;border:1.5px solid #E0E0EC;border-radius:8px;padding:5px 10px;font-size:12px;color:#5A5A7A;cursor:pointer;outline:none;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(460px,1fr));gap:14px;}
+@media(max-width:520px){.grid{grid-template-columns:1fr;}}
+
+/* ── CARD ────────────────────────────────────── */
+.pcard{background:#fff;border:2px solid #E8E8F4;border-radius:16px;overflow:hidden;transition:all .2s;position:relative;}
+.pcard:hover{border-color:var(--cc);box-shadow:0 6px 24px rgba(0,0,0,.08);transform:translateY(-2px);}
+.pcard-header{padding:1rem 1.1rem .75rem;}
+.card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.cat-dot{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--cl);}
+.card-meta{flex:1;}
+.card-title{font-size:14px;font-weight:700;color:#1A1A2E;line-height:1.3;margin-bottom:5px;}
+.badge-row{display:flex;gap:5px;flex-wrap:wrap;}
+.badge{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:10px;background:var(--cl);color:var(--cc);}
+.diff-e{background:#ECFDF5;color:#065F46;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;}
+.diff-m{background:#FFFBEB;color:#92400E;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;}
+.diff-h{background:#FFF1F2;color:#9F1239;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;}
+.fav-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid #E0E0EC;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .18s;flex-shrink:0;}
+.fav-btn:hover{border-color:#E8963A;background:#FFFBEB;}
+.fav-btn.on{border-color:#E8963A;background:#FFFBEB;}
+
+/* ── FILL IN / OUTPUT ────────────────────────── */
+.fill-sec{background:var(--cl);border-top:1px solid rgba(0,0,0,.05);padding:10px 1.1rem;}
+.sec-lbl{font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--cc);margin-bottom:6px;opacity:.8;}
+.fill-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.ftag{background:#fff;border:1.5px solid var(--cc);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--cc);font-weight:600;opacity:.85;}
+.out-sec{background:#F0FDF4;border-top:1px solid #BBF7D0;padding:9px 1.1rem;}
+.out-lbl{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#16A34A;margin-bottom:4px;}
+.out-txt{font-size:11.5px;color:#14532D;line-height:1.55;}
+
+/* ── PROMPT TOGGLE ───────────────────────────── */
+.ptoggle{width:100%;background:none;border:none;border-top:1px solid #E8E8F4;padding:7px 1.1rem;font-size:11.5px;font-weight:600;color:#9090AA;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .15s;}
+.ptoggle:hover{background:#F8F8FE;color:#5A5A7A;}
+.pbox{display:none;background:#1A1A2E;border-top:1px solid #E8E8F4;padding:12px 1.1rem;}
+.pbox.open{display:block;}
+.pcode{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:11px;color:#CBD5E1;line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.pcode .var{background:rgba(232,150,58,.22);color:#FCD34D;border-radius:3px;padding:1px 4px;}
+.pcode .tag{color:#6EE7B7;}
+
+/* ── CARD FOOTER ─────────────────────────────── */
+.card-foot{padding:8px 1.1rem 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.tip-row{font-size:11px;color:#9090AA;display:flex;align-items:flex-start;gap:5px;flex:1;line-height:1.45;}
+.copy-btn{background:linear-gradient(135deg,var(--cc),var(--cc));color:#fff;border:none;border-radius:9px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .2s;flex-shrink:0;opacity:.92;}
+.copy-btn:hover{opacity:1;transform:scale(1.03);}
+.copy-btn.ok{background:linear-gradient(135deg,#16A34A,#0D9488);}
+
+/* ── EMPTY ───────────────────────────────────── */
+.empty{text-align:center;padding:3rem;color:#9090AA;grid-column:1/-1;}
+.empty-ico{font-size:48px;margin-bottom:12px;}
+
+/* ── TOAST ───────────────────────────────────── */
+.toast{position:fixed;bottom:20px;right:20px;background:#1A1A2E;color:#fff;border-radius:12px;padding:10px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;transform:translateY(80px);opacity:0;transition:all .28s;z-index:999;box-shadow:0 6px 28px rgba(0,0,0,.22);}
+.toast.show{transform:none;opacity:1;}
+
+/* ── FOOTER ──────────────────────────────────── */
+footer{background:#1A1A2E;color:rgba(255,255,255,.55);text-align:center;padding:1.5rem 2rem;font-size:12px;}
+footer a{color:rgba(255,255,255,.75);text-decoration:none;}
+footer a:hover{color:#FFD580;}
+
+@media print{nav,footer,.cats,.nbtn,.fav-btn,.copy-btn,.ptoggle,.onboard,.toast{display:none!important;}.pcard{break-inside:avoid;border:1px solid #ddd;margin-bottom:10px;}.pbox{display:block!important;}}
+</style>
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div class="onboard" id="ob">
+  <div class="ob-title">👋 Welcome to the Claude Prompt Library!</div>
+  <div class="ob-sub">Pick a task, fill in 2–3 details, paste into Claude. Expert output in under 60 seconds. <strong>No AI experience needed.</strong></div>
+  <div class="ob-steps">
+    <div class="ob-step">
+      <div class="ob-step-n" style="background:#E55A2B">1</div>
+      <h3>Find your task</h3>
+      <p>Search or pick a category — e.g. "test cases" or "defect report".</p>
+    </div>
+    <div class="ob-step">
+      <div class="ob-step-n" style="background:#E8963A">2</div>
+      <h3>Fill in the <span class="fill-eg">[orange parts]</span></h3>
+      <p>Replace each bracket with your real project details. Takes 30 seconds.</p>
+    </div>
+    <div class="ob-step">
+      <div class="ob-step-n" style="background:#16A34A">3</div>
+      <h3>Paste into Claude → done!</h3>
+      <p>Open claude.ai, paste, press Enter. Get professional output instantly.</p>
+    </div>
+  </div>
+  <div class="ob-example">
+    <div class="ob-ex-lbl">QUICK EXAMPLE</div>
+    <div class="ob-ex-row">
+      <div class="ob-ex-box">You type:<br><br>"Generate test cases for <span class="fill-eg">[Login page]</span> in <span class="fill-eg">[D365]</span> for <span class="fill-eg">[Admin user]</span>…"</div>
+      <div class="ob-ex-arr">→</div>
+      <div class="ob-ex-out">Claude gives:<br><br>TC-01 | Valid login ✅<br>TC-02 | Wrong password ✅<br>TC-03 | Account lockout… ✅</div>
+    </div>
+  </div>
+  <button class="ob-btn" onclick="document.getElementById('ob').classList.add('hidden');localStorage.setItem('ob','1')">Got it — show me the templates →</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">⭐ QA ENGINEER EDITION — PERSONALISED FOR MY TASKS</div>
+    <h1>Your <span>Claude Prompt Library</span></h1>
+    <p>Ready-made AI prompts for every QA task. Pick one, fill in your details, and get expert results in under 60 seconds — no AI experience needed.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-v" id="hs-t">13</span><span class="hstat-l">Templates</span></div>
+      <div class="hstat"><span class="hstat-v">7</span><span class="hstat-l">Categories</span></div>
+      <div class="hstat"><span class="hstat-v">~60s</span><span class="hstat-l">Time to expert output</span></div>
+      <div class="hstat"><span class="hstat-v">0</span><span class="hstat-l">AI experience needed</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="logo-pill">✦</div>
+      <span class="nav-title">Ramya B's <span>Claude</span> Library</span>
+    </div>
+    <div class="nav-right">
+      <button class="nbtn hot" onclick="document.getElementById('ob').classList.remove('hidden');window.scrollTo(0,0)">💡 How to use</button>
+      <button class="nbtn" onclick="window.print()">🖨️ Print</button>
+    </div>
+  </div>
+</nav>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="srch-wrap">
+    <svg class="srch-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search" type="text" placeholder="Search by task, tool, or keyword…" oninput="render()" autocomplete="off"/>
+    <span class="kbd-hint">Ctrl+K</span>
+  </div>
+  <div class="cats" id="cats"></div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <div class="res-bar">
+    <span class="res-count" id="rcnt"><strong>13</strong> templates</span>
+    <select class="sort-sel" onchange="render()">
+      <option value="def">Default order</option>
+      <option value="az">A → Z</option>
+      <option value="fav">Favourites first</option>
+      <option value="easy">Easiest first</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  Built by <strong style="color:rgba(255,255,255,.85)">Ramya B</strong> · Senior QA Engineer · Bengaluru &nbsp;|&nbsp;
+  Powered by <a href="https://claude.ai" target="_blank">Claude by Anthropic</a>
+</footer>
+
+<div class="toast" id="toast"><span id="tmsg">✅ Copied!</span></div>
+
+<script>
+const CAT={
+  "Test Cases":        {cc:"#E55A2B",cl:"#FFF0EB",cb:"col-tc",  icon:"🧪"},
+  "D365 F&O":          {cc:"#7C3AED",cl:"#F5F3FF",cb:"col-d365",icon:"⚙️"},
+  "Salesforce":        {cc:"#0284C7",cl:"#F0F9FF",cb:"col-sf",  icon:"☁️"},
+  "Azure DevOps":      {cc:"#0D9488",cl:"#F0FDFA",cb:"col-ado", icon:"🔄"},
+  "Defect Management": {cc:"#E11D48",cl:"#FFF1F2",cb:"col-def", icon:"🐛"},
+  "Power BI":          {cc:"#16A34A",cl:"#F0FDF4",cb:"col-pbi", icon:"📊"},
+  "Documentation":     {cc:"#6B7280",cl:"#F9FAFB",cb:"col-doc", icon:"📋"},
+};
+const DATA=[
+  {cat:"Test Cases",diff:"easy",title:"Generate test cases for a feature",
+   fields:["Feature name","App (e.g. D365 / Salesforce)","User role"],
+   output:"Numbered test cases with steps, expected result, and priority — ready for Jira or ADO.",
+   prompt:`You are a senior QA Engineer with 10+ years in enterprise software testing.\n\n<feature>[FEATURE NAME — e.g. D365 Payment Processing]</feature>\n<context>[Brief description — module, user role, entry points]</context>\n\nGenerate comprehensive test cases covering:\n1. Positive scenarios (happy path)\n2. Negative scenarios (invalid inputs, failures)\n3. Edge cases and boundary values\n4. Integration touchpoints\n\nFormat each as: TC-ID | Description | Precondition | Steps | Expected Result | Priority`,
+   tip:"Works for any feature — D365, Salesforce, or custom web apps."},
+
+  {cat:"Test Cases",diff:"medium",title:"Generate Playwright / TypeScript test script",
+   fields:["Feature or page name","App URL","Your manual test steps (paste them in)"],
+   output:"A complete Playwright TypeScript test file with Page Object Model, ADO tags, and error handling.",
+   prompt:`You are a senior automation engineer expert in Playwright with TypeScript.\n\n<feature>[FEATURE — e.g. Login page / D365 Sales Order]</feature>\n<url>[App URL or page path]</url>\n<test_cases>\n[Paste your manual test cases or steps here]\n</test_cases>\n\nWrite a complete Playwright TypeScript test file using:\n- Page Object Model pattern\n- Fixtures for setup/teardown\n- Proper locators (data-testid preferred)\n- Meaningful test descriptions\n- ADO tags @smoke @regression\n\nInclude error handling and a comment per test block.`,
+   tip:"Give it your manual steps — it writes the automation code for you."},
+
+  {cat:"Test Cases",diff:"easy",title:"Generate edge case test cases",
+   fields:["Feature name","Input fields and their data types","Known validation rules"],
+   output:"15–20 edge case tests covering boundary values, empty inputs, and unusual user behaviour — as a table.",
+   prompt:`You are a QA Lead specialising in boundary testing and edge case analysis.\n\n<feature>[FEATURE NAME]</feature>\n<fields>\n[List all input fields with data types and validation rules]\n</fields>\n\nGenerate 15-20 edge case test cases focusing on:\n- Boundary values (min, max, just-over, just-under)\n- Empty / null / whitespace inputs\n- Special characters and SQL injection attempts\n- Concurrent user scenarios\n- Session timeout and re-entry\n- Large data volumes\n\nFormat: TC-ID | Input | Expected | Severity`,
+   tip:"Run this before every release — catches bugs normal testing misses."},
+
+  {cat:"D365 F&O",diff:"hard",title:"D365 OData API test cases",
+   fields:["D365 entity name (e.g. SalesOrderHeaderV2)","Environment (DEV / UAT / PROD)","Operations to test (GET / POST / PATCH / DELETE)"],
+   output:"Complete API test cases with sample URLs, payloads, and expected JSON responses covering CRUD and error handling.",
+   prompt:`You are a D365 F&O technical QA expert specialising in OData REST APIs.\n\n<entity>[D365 Entity — e.g. SalesOrderHeaderV2]</entity>\n<environment>[DEV / UAT / PROD]</environment>\n<operations>[GET, POST, PATCH, DELETE — specify which apply]</operations>\n\nGenerate test cases covering:\n- Authentication and authorisation (AAD token)\n- Valid CRUD operations with sample payloads\n- OData filter, expand, select parameters\n- Error responses (401, 404, 400, 500)\n- Field validation and mandatory field checks\n- Pagination with $top and $skip\n\nInclude sample URL patterns and expected JSON structures.`,
+   tip:"Pre-fill entity name from your project documents (e.g. SalesOrderHeaderV2)."},
+
+  {cat:"D365 F&O",diff:"medium",title:"RSAT test recording review",
+   fields:["RSAT recording steps (paste in)","Business scenario being tested (e.g. PO approval)"],
+   output:"Findings table with gaps, missing assertions, flakiness risks, and recommended fixes — all prioritised.",
+   prompt:`You are a D365 RSAT and Azure DevOps expert.\n\n<test_recording>[Paste RSAT recording steps or XML here]</test_recording>\n<business_scenario>[What this tests — e.g. Purchase Order approval flow]</business_scenario>\n\nReview this RSAT recording and provide:\n1. Missing steps or gaps in coverage\n2. Variables that should be parameterised\n3. Assertions that should be added\n4. Potential flakiness risks\n5. Recommended Excel test data structure\n\nFormat: Finding | Location | Recommendation | Priority`,
+   tip:"Paste your RSAT XML directly — Claude reads and analyses it all."},
+
+  {cat:"D365 F&O",diff:"easy",title:"D365 KT document outline",
+   fields:["D365 module name (e.g. Accounts Payable)","Audience (e.g. New QA engineer)","Scope — processes covered"],
+   output:"Complete KT document outline with navigation paths, process flows, troubleshooting guide, and UAT checklist.",
+   prompt:`You are a D365 F&O functional consultant creating knowledge transfer documentation.\n\n<module>[D365 Module — e.g. Accounts Payable / FDD-008 Display Pick Slip]</module>\n<audience>[Audience — e.g. New QA engineer onboarding]</audience>\n<scope>[Functional scope — processes, forms, integrations covered]</scope>\n\nCreate a detailed KT document covering:\n1. Module overview and business purpose\n2. Key forms, menus and navigation paths\n3. Configuration prerequisites\n4. Core business process flows (numbered steps)\n5. Integration points with other modules\n6. Common issues and troubleshooting\n7. Test scenarios and UAT checklist\n8. Glossary of D365-specific terms`,
+   tip:"Works for any D365 module — great for onboarding new team members."},
+
+  {cat:"Salesforce",diff:"medium",title:"Salesforce Sales / Service Cloud test cases",
+   fields:["Feature name (e.g. Lead conversion)","Cloud type (Sales / Service / Both)","User profiles involved"],
+   output:"Profile-specific test cases covering access, workflow triggers, validation rules, and integration — formatted for ADO.",
+   prompt:`You are a Salesforce QA engineer with ADM-201 certification.\n\n<feature>[Feature — e.g. Lead conversion / Case escalation rule]</feature>\n<org_type>[Sales Cloud / Service Cloud / Both]</org_type>\n<user_profiles>[Profiles — e.g. Sales Rep, System Admin, Service Agent]</user_profiles>\n\nGenerate test cases covering:\n- Profile-based access and visibility\n- Workflow rules and process builder triggers\n- Validation rules — positive and bypass scenarios\n- Page layout and field-level security\n- Integration with Email-to-Case / Web-to-Lead\n- Reports and dashboard accuracy\n\nFormat: TC-ID | Module | User Profile | Steps | Expected | Pass/Fail`,
+   tip:"Works for any Salesforce feature — specify user profiles for accurate access testing."},
+
+  {cat:"Azure DevOps",diff:"hard",title:"Playwright pipeline debug",
+   fields:["Your azure-pipelines.yml (paste it)","Error log from the failed run","Node version, OS, Playwright version"],
+   output:"Root cause explanation + fixed YAML code you copy straight into your pipeline — plus tips to prevent recurrence.",
+   prompt:`You are a DevOps and Playwright automation expert with deep Azure DevOps knowledge.\n\n<pipeline_yaml>\n[Paste your azure-pipelines.yml here]\n</pipeline_yaml>\n<error_log>\n[Paste the failing pipeline error output here]\n</error_log>\n<context>\nNode version: [e.g. 18.x]\nOS: [ubuntu-latest / windows-latest]\nPlaywright version: [e.g. 1.44]\n</context>\n\nDiagnose the pipeline failure:\n1. Root cause analysis\n2. Step-by-step fix with exact YAML changes\n3. Any caching or browser install issues\n4. Best practice improvements\n5. A corrected pipeline YAML snippet`,
+   tip:"Paste the exact error log — the more detail, the better the diagnosis."},
+
+  {cat:"Azure DevOps",diff:"easy",title:"ADO test plan and suite setup",
+   fields:["Project name (e.g. GlobalTech / RetailMax)","Sprint or release name","Features in scope"],
+   output:"Full ADO test plan with suite hierarchy, config matrix, entry/exit criteria, and a sign-off checklist.",
+   prompt:`You are an Azure DevOps test management expert.\n\n<project>[Project name — e.g. GlobalTech / RetailMax]</project>\n<release>[Release name or sprint — e.g. Sprint 5 / Release 2.0]</release>\n<features>[List of features in scope for this release]</features>\n\nCreate a structured ADO test plan:\n1. Test plan name and description\n2. Test suite hierarchy\n3. Test configuration matrix (browsers, environments)\n4. Entry and exit criteria\n5. Defect severity classification\n6. Sign-off checklist template\n\nInclude recommended ADO naming conventions.`,
+   tip:"Use at the start of every sprint — 2 minutes instead of 30."},
+
+  {cat:"Defect Management",diff:"easy",title:"Write a detailed defect report",
+   fields:["What went wrong (one sentence)","Steps to reproduce","What should have happened","Browser, app version, environment"],
+   output:"A complete Jira/ADO defect report with severity, numbered steps, actual vs expected, and suggested fix direction.",
+   prompt:`You are a senior QA engineer writing a precise defect report for Jira / Azure DevOps.\n\n<summary>[One-line defect summary]</summary>\n<observed>[What actually happened — paste exact error or behaviour]</observed>\n<expected>[What should have happened]</expected>\n<steps>[Steps you followed to reproduce]</steps>\n<environment>[Browser, OS, App version, Environment — DEV/UAT/PROD]</environment>\n\nWrite a complete defect report:\n- Clear, developer-ready title\n- Severity and Priority with justification\n- Numbered reproduction steps\n- Actual vs Expected clearly separated\n- Root cause hypothesis\n- Suggested fix direction\n- Suggested regression scope\n\nFormat for direct copy-paste into Jira or ADO.`,
+   tip:"Anyone on the team can use this — no QA experience needed to write a great bug report."},
+
+  {cat:"Defect Management",diff:"medium",title:"Root cause analysis (5-Whys)",
+   fields:["Defect title and description","Module affected","Recent changes deployed before the bug"],
+   output:"Structured RCA with 5-Whys: immediate cause, root cause, corrective actions, and new regression test cases.",
+   prompt:`You are a QA Lead performing root cause analysis for a production defect.\n\n<defect_title>[Defect title]</defect_title>\n<defect_description>[Full defect description and symptoms]</defect_description>\n<affected_module>[Module — e.g. D365 Procurement / Salesforce Cases]</affected_module>\n<recent_changes>[Any recent deployments, config changes, or data migrations]</recent_changes>\n\nProvide a structured RCA using the 5-Whys:\n1. Immediate cause (what broke)\n2. Contributing factors (why not caught earlier)\n3. Root cause (underlying systemic issue)\n4. Impact assessment\n5. Corrective actions (short-term fix)\n6. Preventive actions (long-term improvements)\n7. New test cases to add to regression suite`,
+   tip:"Great for sprint retrospectives — helps the whole team learn from every defect."},
+
+  {cat:"Power BI",diff:"easy",title:"Power BI report test cases",
+   fields:["Report name (e.g. Pick Slip Enquiry)","Data source (D365 / Dataverse / SQL)","Available filters and slicers in the report"],
+   output:"Test cases for data accuracy, filter functionality, performance, export, and role-level security — table format for ADO.",
+   prompt:`You are a QA engineer specialising in Power BI and D365 reporting validation.\n\n<report_name>[Report — e.g. FDD-8337 Display Pick Slip Generation Enquiry]</report_name>\n<data_source>[D365 F&O / Dataverse / SQL / Azure Synapse]</data_source>\n<filters>[Available slicers and filters in the report]</filters>\n\nGenerate test cases for:\n1. Data accuracy — values match source system\n2. Filter functionality — each slicer works correctly\n3. Date range filtering and edge cases\n4. Null / empty data handling\n5. Performance — report load time\n6. Cross-filter interactions between visuals\n7. Export to Excel/PDF accuracy\n8. Role-level security\n\nFormat: TC-ID | Visual | Test Type | Steps | Expected | Priority`,
+   tip:"Works for any Power BI report — fill in your report name and available slicers."},
+
+  {cat:"Documentation",diff:"easy",title:"Test summary report",
+   fields:["Project and sprint name","Test counts (passed / failed / blocked)","Open defect IDs and severities"],
+   output:"Professional test summary with exec summary, metrics, defect breakdown, release risk, and Go / No-Go recommendation.",
+   prompt:`You are a QA Lead writing a formal test execution summary for stakeholder sign-off.\n\n<project>[Project name]</project>\n<sprint_release>[Sprint / Release name]</sprint_release>\n<execution_stats>\nTotal: [X] | Passed: [X] | Failed: [X] | Blocked: [X] | Not run: [X]\n</execution_stats>\n<open_defects>[List critical/high open defects with IDs]</open_defects>\n<scope>[Features tested]</scope>\n\nWrite a professional test summary:\n1. Executive summary (3 sentences, non-technical)\n2. Test scope and objectives\n3. Execution metrics with pass/fail %\n4. Defect summary by severity\n5. Risk assessment for release\n6. Sign-off recommendation: Go / No-Go / Conditional Go\n7. Outstanding items and mitigation`,
+   tip:"4 minutes instead of 90 — perfect for sprint end sign-offs with clients."},
+];
+
+const DIFF={easy:{lbl:"Beginner friendly",cls:"diff-e"},medium:{lbl:"Intermediate",cls:"diff-m"},hard:{lbl:"Advanced",cls:"diff-h"}};
+let activeCat="All",favs=JSON.parse(localStorage.getItem("rfavs")||"[]");
+if(localStorage.getItem("ob")==="1")document.getElementById("ob").classList.add("hidden");
+
+const catList=["All",...Object.keys(CAT)];
+function renderCats(){
+  document.getElementById("cats").innerHTML=catList.map(c=>{
+    const cfg=CAT[c],isA=c===activeCat;
+    const st=isA&&c!=="All"?`background:${cfg.cc};color:#fff;border-color:${cfg.cc};`:"";
+    const allSt=isA&&c==="All"?"":"";
+    return`<button class="cbt ${isA&&c==="All"?"active-all":""}" style="${st}" onclick="setC('${c.replace("&","AND")}')">${cfg?cfg.icon+" ":"✦ "}${c}</button>`;
+  }).join("");
+}
+function setC(c){activeCat=c.replace("AND","&");render();}
+
+function hl(s){
+  return s.replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/(\[([^\]]+)\])/g,'<span class="var">$1</span>')
+    .replace(/(&lt;\/?)(\w+)(&gt;)/g,'<span class="tag">$1$2$3</span>');
+}
+function getFilt(){
+  const q=document.getElementById("search").value.toLowerCase();
+  const srt=document.querySelector(".sort-sel").value;
+  let f=DATA.filter(d=>{
+    const mc=activeCat==="All"||d.cat===activeCat;
+    const mq=!q||[d.title,d.cat,d.output,...d.fields].join(" ").toLowerCase().includes(q);
+    return mc&&mq;
+  });
+  if(srt==="az")f.sort((a,b)=>a.title.localeCompare(b.title));
+  if(srt==="fav")f.sort((a,b)=>(favs.includes(b.title)?1:0)-(favs.includes(a.title)?1:0));
+  if(srt==="easy")f.sort((a,b)=>["easy","medium","hard"].indexOf(a.diff)-["easy","medium","hard"].indexOf(b.diff));
+  return f;
+}
+
+function render(){
+  renderCats();
+  const f=getFilt();
+  document.getElementById("rcnt").innerHTML=`<strong>${f.length}</strong> template${f.length!==1?"s":""}`;
+  document.getElementById("hs-t").textContent=DATA.length;
+  const grid=document.getElementById("grid");
+  if(!f.length){grid.innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><p style="font-size:15px;font-weight:600;color:#5A5A7A;margin-bottom:4px">No templates found</p><p>Try a different search or category.</p></div>`;return;}
+  grid.innerHTML=f.map((d,i)=>{
+    const cfg=CAT[d.cat],df=DIFF[d.diff],isFav=favs.includes(d.title);
+    return`<div class="pcard ${cfg.cb}" style="--cc:${cfg.cc};--cl:${cfg.cl}">
+      <div class="pcard-header">
+        <div class="card-top">
+          <div class="cat-dot">${cfg.icon}</div>
+          <div class="card-meta">
+            <div class="card-title">${d.title}</div>
+            <div class="badge-row">
+              <span class="badge">${d.cat}</span>
+              <span class="${df.cls}">${df.lbl}</span>
+            </div>
+          </div>
+          <button class="fav-btn ${isFav?"on":""}" title="Favourite" onclick="toggleFav(${i},'${d.title.replace(/'/g,"\\'")}')">
+            ${isFav?"⭐":"☆"}
+          </button>
+        </div>
+      </div>
+      <div class="fill-sec">
+        <div class="sec-lbl">📝 WHAT YOU FILL IN</div>
+        <div class="fill-tags">${d.fields.map(f=>`<span class="ftag">${f}</span>`).join("")}</div>
+      </div>
+      <div class="out-sec">
+        <div class="out-lbl">✅ WHAT CLAUDE GIVES YOU</div>
+        <div class="out-txt">${d.output}</div>
+      </div>
+      <button class="ptoggle" onclick="toggleP(${i})" id="ptb-${i}">
+        <span>🔍 View full prompt (advanced users)</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="ptar-${i}"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="pbox" id="pb-${i}"><pre class="pcode">${hl(d.prompt)}</pre></div>
+      <div class="card-foot">
+        <div class="tip-row">💡 ${d.tip}</div>
+        <button class="copy-btn" id="cb-${i}" onclick="copyP(${i})" style="background:${cfg.cc}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy prompt
+        </button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleP(i){
+  const b=document.getElementById("pb-"+i),ar=document.getElementById("ptar-"+i),btn=document.getElementById("ptb-"+i);
+  const o=b.classList.toggle("open");
+  ar.setAttribute("points",o?"18 15 12 9 6 15":"6 9 12 15 18 9");
+  btn.querySelector("span").textContent=o?"🔼 Hide prompt":"🔍 View full prompt (advanced users)";
+}
+function copyP(i){
+  const d=getFilt()[i];
+  navigator.clipboard.writeText(d.prompt).then(()=>{
+    const btn=document.getElementById("cb-"+i);
+    btn.textContent="✅ Copied!";btn.classList.add("ok");
+    showToast("✅ Prompt copied — paste into claude.ai!");
+    setTimeout(()=>{btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy prompt`;btn.classList.remove("ok");},2500);
+  });
+}
+function toggleFav(i,title){
+  const idx=favs.indexOf(title);
+  if(idx>-1)favs.splice(idx,1);else favs.push(title);
+  localStorage.setItem("rfavs",JSON.stringify(favs));
+  showToast(idx>-1?"Removed from favourites":"⭐ Saved to favourites!");
+  render();
+}
+function showToast(msg){
+  const t=document.getElementById("toast");
+  document.getElementById("tmsg").textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2800);
+}
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="k"){e.preventDefault();document.getElementById("search").focus();}});
+document.getElementById("search").addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
