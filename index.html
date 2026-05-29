@@ -17,6 +17,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .col-def   {--cc:#E11D48;--cl:#FFF1F2;--cb:rgba(225,29,72,0.12);}
 .col-pbi   {--cc:#16A34A;--cl:#F0FDF4;--cb:rgba(22,163,74,0.12);}
 .col-doc   {--cc:#6B7280;--cl:#F9FAFB;--cb:rgba(107,114,128,0.10);}
+.col-pres  {--cc:#9333EA;--cl:#FAF5FF;--cb:rgba(147,51,234,0.12);}
+.col-awd   {--cc:#F59E0B;--cl:#FFFBEB;--cb:rgba(245,158,11,0.12);}
+.col-web   {--cc:#0EA5E9;--cl:#F0F9FF;--cb:rgba(14,165,233,0.12);}
+.col-ins   {--cc:#0D9488;--cl:#F0FDFA;--cb:rgba(13,148,136,0.12);}
+.col-eco   {--cc:#F97316;--cl:#FFF7ED;--cb:rgba(249,115,22,0.12);}
 
 /* ── HERO ────────────────────────────────────── */
 .hero{background:linear-gradient(135deg,#E55A2B 0%,#C2185B 35%,#7C3AED 70%,#0D9488 100%);padding:3rem 2rem 2.5rem;position:relative;overflow:hidden;}
@@ -181,11 +186,11 @@ footer a:hover{color:#FFD580;}
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-badge">⭐ QA ENGINEER EDITION — PERSONALISED FOR MY TASKS</div>
-    <h1>Your <span>Claude Prompt Library</span></h1>
+    <h1><span>Claude Prompt Library</span></h1>
     <p>Ready-made AI prompts for every QA task. Pick one, fill in your details, and get expert results in under 60 seconds — no AI experience needed.</p>
     <div class="hero-stats">
-      <div class="hstat"><span class="hstat-v" id="hs-t">13</span><span class="hstat-l">Templates</span></div>
-      <div class="hstat"><span class="hstat-v">7</span><span class="hstat-l">Categories</span></div>
+      <div class="hstat"><span class="hstat-v" id="hs-t">34</span><span class="hstat-l">Templates</span></div>
+      <div class="hstat"><span class="hstat-v">12</span><span class="hstat-l">Categories</span></div>
       <div class="hstat"><span class="hstat-v">~60s</span><span class="hstat-l">Time to expert output</span></div>
       <div class="hstat"><span class="hstat-v">0</span><span class="hstat-l">AI experience needed</span></div>
     </div>
@@ -197,7 +202,7 @@ footer a:hover{color:#FFD580;}
   <div class="nav-inner">
     <div class="nav-logo">
       <div class="logo-pill">✦</div>
-      <span class="nav-title">Ramya B's <span>Claude</span> Library</span>
+      <span class="nav-title">Claude Prompt Library</span>
     </div>
     <div class="nav-right">
       <button class="nbtn hot" onclick="document.getElementById('ob').classList.remove('hidden');window.scrollTo(0,0)">💡 How to use</button>
@@ -246,6 +251,11 @@ const CAT={
   "Defect Management": {cc:"#E11D48",cl:"#FFF1F2",cb:"col-def", icon:"🐛"},
   "Power BI":          {cc:"#16A34A",cl:"#F0FDF4",cb:"col-pbi", icon:"📊"},
   "Documentation":     {cc:"#6B7280",cl:"#F9FAFB",cb:"col-doc", icon:"📋"},
+  "Presentations":     {cc:"#9333EA",cl:"#FAF5FF",cb:"col-pres",icon:"🎯"},
+  "AI Writing & Docs": {cc:"#F59E0B",cl:"#FFFBEB",cb:"col-awd", icon:"✍️"},
+  "Web Application":   {cc:"#0EA5E9",cl:"#F0F9FF",cb:"col-web", icon:"🌐"},
+  "Insurance":         {cc:"#0D9488",cl:"#F0FDFA",cb:"col-ins", icon:"🛡️"},
+  "E-commerce":        {cc:"#F97316",cl:"#FFF7ED",cb:"col-eco", icon:"🛒"},
 };
 const DATA=[
   {cat:"Test Cases",diff:"easy",title:"Generate test cases for a feature",
@@ -325,6 +335,140 @@ const DATA=[
    output:"Professional test summary with exec summary, metrics, defect breakdown, release risk, and Go / No-Go recommendation.",
    prompt:`You are a QA Lead writing a formal test execution summary for stakeholder sign-off.\n\n<project>[Project name]</project>\n<sprint_release>[Sprint / Release name]</sprint_release>\n<execution_stats>\nTotal: [X] | Passed: [X] | Failed: [X] | Blocked: [X] | Not run: [X]\n</execution_stats>\n<open_defects>[List critical/high open defects with IDs]</open_defects>\n<scope>[Features tested]</scope>\n\nWrite a professional test summary:\n1. Executive summary (3 sentences, non-technical)\n2. Test scope and objectives\n3. Execution metrics with pass/fail %\n4. Defect summary by severity\n5. Risk assessment for release\n6. Sign-off recommendation: Go / No-Go / Conditional Go\n7. Outstanding items and mitigation`,
    tip:"4 minutes instead of 90 — perfect for sprint end sign-offs with clients."},
+
+  // ── EXISTING CATEGORY ADDITIONS ─────────────────────────────────
+
+  {cat:"Test Cases",diff:"medium",title:"REST API test cases",
+   fields:["API endpoint URL (e.g. /api/v1/orders)","HTTP methods to test (GET / POST / PUT / DELETE)","Request body fields and data types"],
+   output:"Complete API test cases with URLs, request payloads, expected responses, status codes, and error handling — table format for ADO.",
+   prompt:`You are a senior QA Engineer specialising in REST API testing.\n\n<endpoint>[API endpoint — e.g. /api/v1/orders]</endpoint>\n<methods>[HTTP methods — GET, POST, PUT, DELETE]</methods>\n<request_body>[Request body fields with data types and validation rules]</request_body>\n<auth>[Authentication type — Bearer token / API key / OAuth]</auth>\n\nGenerate comprehensive REST API test cases covering:\n1. Happy path — valid requests and expected 200/201 responses\n2. Authentication — valid, invalid, expired tokens\n3. Input validation — missing fields, wrong data types, boundary values\n4. Error responses — 400, 401, 403, 404, 500 with correct messages\n5. Response schema validation — all required fields present\n6. Performance — response time under 2 seconds\n\nFormat: TC-ID | Method | Endpoint | Request Body | Expected Status | Expected Response | Priority`,
+   tip:"Works for any REST API — D365 OData, Salesforce, or custom services."},
+
+  {cat:"D365 F&O",diff:"medium",title:"Generate D365 test data",
+   fields:["D365 module and entity (e.g. Customer in AR)","Number of test records needed","Special conditions (e.g. blocked customer, zero balance)"],
+   output:"Complete test data set with realistic values for all required fields — ready to import or enter manually in D365.",
+   prompt:`You are a D365 F&O test data specialist.\n\n<module>[D365 Module — e.g. Accounts Receivable / Procurement]</module>\n<entity>[Entity — e.g. Customer, Vendor, Sales Order]</entity>\n<quantity>[Number of test records needed]</quantity>\n<conditions>[Special conditions — e.g. blocked vendor, overdue invoice, zero stock]</conditions>\n\nGenerate realistic test data covering:\n1. Valid records for happy path testing\n2. Edge case records (boundary values, special characters)\n3. Invalid records for negative testing\n4. Records matching special conditions specified\n\nProvide data in a table with all mandatory D365 fields populated. Include notes on which records test which scenario.`,
+   tip:"Saves hours of manual data creation — specify special conditions for edge case coverage."},
+
+  {cat:"Defect Management",diff:"easy",title:"Create Jira ticket from defect",
+   fields:["Defect description (plain English)","Module or feature affected","Steps to reproduce","Severity (Critical / High / Medium / Low)"],
+   output:"A complete, properly formatted Jira ticket with summary, description, acceptance criteria, labels, and suggested fix — ready to create.",
+   prompt:`You are a senior QA Engineer creating a well-structured Jira defect ticket.\n\n<defect_description>[Plain English description of the defect]</defect_description>\n<module>[Module or feature affected]</module>\n<steps>[Steps to reproduce the defect]</steps>\n<severity>[Critical / High / Medium / Low]</severity>\n<environment>[Environment — DEV / UAT / PROD, browser, app version]</environment>\n\nCreate a complete Jira ticket with:\n1. Summary — clear, concise, developer-friendly title\n2. Description — detailed defect explanation\n3. Steps to reproduce — numbered, precise\n4. Expected vs Actual behaviour\n5. Acceptance criteria — what done looks like\n6. Suggested labels and components\n7. Priority recommendation with justification\n8. Suggested fix direction for developers\n\nFormat for direct copy-paste into Jira.`,
+   tip:"Anyone on the team can raise a perfect Jira ticket — no QA experience needed."},
+
+  {cat:"Documentation",diff:"easy",title:"UAT sign-off email",
+   fields:["Project and sprint name","UAT outcome (Pass / Conditional Pass / Fail)","Key test results summary","Any outstanding items or conditions"],
+   output:"Professional UAT sign-off email ready to send to stakeholders — with results summary, risk statement, and formal sign-off language.",
+   prompt:`You are a QA Lead writing a formal UAT sign-off email to project stakeholders.\n\n<project>[Project name and sprint/release]</project>\n<outcome>[UAT outcome — Pass / Conditional Pass / Fail]</outcome>\n<results>[Key test results — passed, failed, blocked counts and key findings]</results>\n<outstanding>[Any outstanding items, conditions, or deferred defects]</outstanding>\n<recipients>[Who this is going to — e.g. Project Manager, Business Owner, Dev Lead]</recipients>\n\nWrite a professional UAT sign-off email:\n1. Subject line\n2. Executive summary (2-3 sentences)\n3. Test execution summary\n4. Outstanding items and conditions\n5. Formal sign-off statement\n6. Next steps\n\nTone: professional, clear, non-technical where possible.`,
+   tip:"Send in under 2 minutes — stakeholders get a clear, professional communication every time."},
+
+  {cat:"Documentation",diff:"easy",title:"New QA onboarding checklist",
+   fields:["Project name and tech stack","QA tools used (e.g. ADO, Playwright, RSAT)","Key modules or features to learn","Timeline for onboarding (e.g. 2 weeks)"],
+   output:"Complete onboarding checklist with weekly plan, tools setup steps, learning resources, first tasks, and success criteria for the new QA engineer.",
+   prompt:`You are a Senior QA Engineer creating an onboarding plan for a new QA team member.\n\n<project>[Project name and tech stack]</project>\n<tools>[QA tools — e.g. Azure DevOps, Playwright, RSAT, D365, Jira]</tools>\n<modules>[Key modules or features the new QA needs to learn]</modules>\n<timeline>[Onboarding timeline — e.g. 2 weeks]</timeline>\n\nCreate a comprehensive onboarding checklist:\n1. Day 1 — environment setup and access\n2. Week 1 — tool familiarisation and reading\n3. Week 2 — hands-on tasks and first test execution\n4. Tools setup steps (with links where possible)\n5. Key documents to read\n6. First 5 tasks to complete independently\n7. Success criteria — what good looks like after onboarding\n8. Buddy / go-to person for each area`,
+   tip:"Takes 3 minutes to generate a 2-week onboarding plan — consistent quality for every new joiner."},
+
+  // ── NEW CATEGORY: PRESENTATIONS ──────────────────────────────────
+
+  {cat:"Presentations",diff:"medium",title:"KT session slide outline",
+   fields:["Topic of the KT session (e.g. D365 Procurement module)","Target audience (e.g. New QA engineers)","Duration of session (e.g. 45 minutes)","Key areas to cover"],
+   output:"A complete slide-by-slide presentation outline with titles, content points, speaker notes, and suggested demo steps — ready to build in PowerPoint.",
+   prompt:`You are a senior QA trainer creating a Knowledge Transfer presentation.\n\n<topic>[KT session topic — e.g. D365 Accounts Payable module]</topic>\n<audience>[Target audience — e.g. New QA engineers, Business analysts]</audience>\n<duration>[Session duration — e.g. 45 minutes, 1 hour]</duration>\n<key_areas>[Key areas to cover in the session]</key_areas>\n\nCreate a detailed slide-by-slide KT presentation outline:\n1. Title slide — session name, presenter, date\n2. Agenda slide\n3. Overview slide — what and why\n4. Core content slides (one per key area)\n5. Live demo steps slide\n6. Common issues and tips slide\n7. Q&A and resources slide\n\nFor each slide provide:\n- Slide title\n- 4-5 bullet points of content\n- Speaker notes (what to say)\n- Suggested visuals or screenshots to include\n- Estimated time for this slide`,
+   tip:"Turn any KT session into a professional presentation in 5 minutes — consistent quality every time."},
+
+  {cat:"Presentations",diff:"easy",title:"Test results presentation",
+   fields:["Project and sprint name","Key metrics (passed / failed / blocked / total)","Top 3 defects found","Release recommendation"],
+   output:"Complete slide deck content for a sprint test results presentation — with exec summary, metrics, defect highlights, and Go/No-Go recommendation slide.",
+   prompt:`You are a QA Lead presenting test results to project stakeholders.\n\n<project>[Project name and sprint]</project>\n<metrics>\nTotal: [X] | Passed: [X] | Failed: [X] | Blocked: [X]\nPass rate: [X]%\n</metrics>\n<top_defects>[Top 3-5 defects with ID, title, and severity]</top_defects>\n<recommendation>[Go / No-Go / Conditional Go for release]</recommendation>\n\nCreate complete slide content for a test results presentation:\n1. Title slide content\n2. Executive summary (3 bullet points — non-technical)\n3. Test metrics slide — numbers and pass rate\n4. Defect summary slide — top defects with severity\n5. Risk assessment slide\n6. Release recommendation slide with justification\n7. Next steps slide\n\nInclude speaker notes for each slide. Keep language non-technical for stakeholder audience.`,
+   tip:"Turn your sprint results into a stakeholder-ready presentation in under 5 minutes."},
+
+  // ── NEW CATEGORY: AI WRITING & DOCS ──────────────────────────────
+
+  {cat:"AI Writing & Docs",diff:"easy",title:"Sprint retrospective notes",
+   fields:["Sprint name and number","What went well (bullet points)","What didn't go well","Action items agreed in the meeting"],
+   output:"Professional, structured retrospective document with sections, action items table with owners and due dates, and a summary paragraph — ready to share with the team.",
+   prompt:`You are a QA Lead writing a sprint retrospective summary document.\n\n<sprint>[Sprint name and number — e.g. Sprint 5]</sprint>\n<went_well>[What went well — paste your bullet points]</went_well>\n<went_wrong>[What didn't go well — paste your bullet points]</went_wrong>\n<action_items>[Action items agreed — paste your notes]</action_items>\n<attendees>[Team members who attended]</attendees>\n\nCreate a professional retrospective document:\n1. Sprint summary (2-3 sentences)\n2. What went well — formatted with context\n3. What to improve — with root cause where possible\n4. Action items table: Action | Owner | Due Date | Priority\n5. Team morale note\n6. Key takeaway for next sprint\n\nTone: constructive, positive, team-focused.`,
+   tip:"60 minutes of note-taking reduced to 5 minutes — consistent format every sprint."},
+
+  {cat:"AI Writing & Docs",diff:"easy",title:"Stakeholder defect email",
+   fields:["Defect title and brief description","Impact on business or user","Current workaround (if any)","Expected fix timeline"],
+   output:"Professional email to business stakeholders explaining a defect in plain English — no technical jargon, clear impact statement, and next steps.",
+   prompt:`You are a QA Lead writing a clear, professional email to business stakeholders about a defect.\n\n<defect>[Defect title and brief description]</defect>\n<impact>[Business or user impact — what can't they do?]</impact>\n<workaround>[Current workaround available — or 'None']</workaround>\n<fix_timeline>[Expected fix timeline — e.g. Next sprint, 2 days]</fix_timeline>\n<recipients>[Stakeholder audience — e.g. Business Owner, Project Manager]</recipients>\n\nWrite a professional stakeholder email:\n1. Subject line — clear and non-alarming\n2. Opening — brief context\n3. What happened — plain English, no technical jargon\n4. Business impact — what this means for users\n5. Current workaround (if any)\n6. What the team is doing to fix it\n7. Expected resolution timeline\n8. Closing — reassuring tone\n\nKeep it under 200 words. No technical terms.`,
+   tip:"Non-technical stakeholders need plain English — this gets the message across without confusion."},
+
+  {cat:"AI Writing & Docs",diff:"easy",title:"UAT meeting agenda",
+   fields:["Project and sprint name","Date and duration of UAT session","Features to be demonstrated","Business stakeholders attending"],
+   output:"A complete UAT meeting agenda with time slots, objectives for each feature, attendee roles, sign-off criteria, and follow-up action items template.",
+   prompt:`You are a QA Lead preparing a UAT session agenda for business stakeholders.\n\n<project>[Project name and sprint]</project>\n<session_details>[Date, time, duration of UAT session]</session_details>\n<features>[Features to be demonstrated and tested]</features>\n<attendees>[Business stakeholders attending — names and roles]</attendees>\n\nCreate a professional UAT meeting agenda:\n1. Meeting header — project, date, attendees, objectives\n2. Timed agenda slots for each feature\n3. For each feature: objective, demo steps, acceptance criteria\n4. Sign-off criteria — what pass looks like\n5. Issue logging process during UAT\n6. Decision point — Go / No-Go\n7. Action items template for post-meeting\n\nFormat clearly with times and owner for each section.`,
+   tip:"Stakeholders arrive prepared and UAT runs smoothly when everyone knows the agenda upfront."},
+
+  {cat:"AI Writing & Docs",diff:"easy",title:"Weekly QA status update",
+   fields:["Week number and date range","Tasks completed this week","Blockers or risks","Plan for next week"],
+   output:"Professional weekly status update ready to send to your manager or post in the team channel — with metrics, RAG status, blockers, and next week plan.",
+   prompt:`You are a QA Engineer writing a weekly status update for your project manager and team.\n\n<week>[Week number and date range — e.g. Week 22: May 27-31]</week>\n<completed>[Tasks completed this week — paste your notes]</completed>\n<in_progress>[Work currently in progress]</in_progress>\n<blockers>[Any blockers, risks, or dependencies]</blockers>\n<next_week>[Plan for next week]</next_week>\n\nWrite a professional weekly QA status update:\n1. Week summary (1-2 sentences)\n2. RAG status: Green / Amber / Red with one-line reason\n3. Completed this week — formatted clearly\n4. In progress\n5. Blockers and risks (with mitigation)\n6. Next week plan\n7. Key metrics if available (test cases run, defects raised)\n\nFormat for Teams or email. Keep it concise — under 250 words.`,
+   tip:"Keeps your manager informed and takes under 3 minutes to generate every Friday."},
+
+  ,{cat:"Web Application",diff:"easy",title:"Cross-browser & responsive test cases",
+   fields:["Web app name and URL","Browsers to test (e.g. Chrome, Edge, Firefox, Safari)","Key pages to test (e.g. Home, Login, Dashboard)"],
+   output:"Complete test case table covering all browsers and screen sizes — layout, functionality, and visual consistency across desktop, tablet and mobile.",
+   prompt:`You are a senior QA Engineer specialising in cross-browser and responsive web testing.\n\n<app>[Web app name and URL]</app>\n<browsers>[Browsers to test — e.g. Chrome, Edge, Firefox, Safari]</browsers>\n<screen_sizes>[Screen sizes — Desktop 1920px, Tablet 768px, Mobile 375px]</screen_sizes>\n<key_pages>[Key pages — e.g. Home, Login, Dashboard, Checkout]</key_pages>\n\nGenerate cross-browser and responsive test cases covering:\n1. Layout and alignment on each browser and screen size\n2. All buttons, links and navigation work correctly\n3. Images load and scale properly\n4. Forms display and submit correctly on all browsers\n5. No horizontal scrollbar on mobile\n6. Touch targets large enough on mobile\n7. Browser-specific issues (Safari date picker, Edge scrollbar)\n8. Font rendering consistent across browsers\n\nFormat: TC-ID | Browser | Screen Size | Test Step | Expected Result | Priority`,
+   tip:"Run before every release — catches UI bugs that only show on specific browsers or devices."}
+
+  ,{cat:"Web Application",diff:"easy",title:"Form validation test cases",
+   fields:["Form name (e.g. Registration form, Checkout form)","All fields in the form","Mandatory fields and their validation rules"],
+   output:"Complete form validation test cases — mandatory checks, format validation, boundary values, error messages, and submit behaviour. Ready for ADO.",
+   prompt:`You are a senior QA Engineer writing form validation test cases for a web application.\n\n<form_name>[Form name — e.g. User Registration Form, Payment Form]</form_name>\n<fields>[All form fields — e.g. Name, Email, Phone, Password, Date of Birth]</fields>\n<mandatory>[Which fields are mandatory]</mandatory>\n<rules>[Validation rules — e.g. Password min 8 chars, Phone 10 digits, Email must have @]</rules>\n\nGenerate form validation test cases covering:\n1. Submit with all valid data (happy path)\n2. Submit with mandatory fields empty\n3. Invalid format — email without @, phone with letters\n4. Boundary values — min and max length for each field\n5. Special characters in text fields\n6. Error message — clear and helpful wording\n7. Tab order and keyboard navigation\n8. Form success and failure states\n9. Paste behaviour in restricted fields\n\nFormat: TC-ID | Field | Test Scenario | Input Data | Expected Result | Priority`,
+   tip:"Works for any web form — registration, login, checkout, contact or payment forms."}
+
+  ,{cat:"Web Application",diff:"medium",title:"Security test checklist",
+   fields:["Web app name and type (e.g. banking portal, e-commerce site)","Authentication type (e.g. OTP, username/password, SSO)","Sensitive data handled (e.g. card numbers, Aadhaar, health records)"],
+   output:"Prioritised security test checklist covering OWASP Top 10 basics — test steps, expected behaviour, and severity rating for each check.",
+   prompt:`You are a QA Engineer performing security testing on a web application.\n\n<app>[Web app name and type — e.g. Insurance portal, E-commerce site]</app>\n<auth>[Authentication — e.g. Username/Password, OTP, Google SSO]</auth>\n<sensitive_data>[Sensitive data — e.g. Credit card, Aadhaar, Health records, PAN]</sensitive_data>\n\nCreate a practical security test checklist covering:\n1. Authentication — brute force protection, account lockout, session timeout\n2. Authorisation — can users access other users data?\n3. Input validation — XSS and SQL injection in all input fields\n4. Session management — session token in URL, secure cookie flags\n5. Sensitive data — PII masked, HTTPS everywhere\n6. Error messages — do they reveal system information?\n7. File upload security — file type and size validation\n8. Password policy — complexity, reset flow security\n9. HTTPS — all pages, no mixed content\n\nFor each: Test | How to test | Expected Result | Severity (Critical/High/Medium)`,
+   tip:"Share with your dev team too — catches security issues before they become production incidents."}
+
+  ,{cat:"Web Application",diff:"medium",title:"Performance test checklist",
+   fields:["Web app name and key pages to test","Expected concurrent users during peak","Acceptable page load time (e.g. under 3 seconds)"],
+   output:"Ready-to-use performance test checklist with specific scenarios, load thresholds, and pass/fail criteria — suitable for JMeter or manual observation.",
+   prompt:`You are a QA Engineer planning performance testing for a web application.\n\n<app>[Web app name and key pages]</app>\n<users>[Expected concurrent users — e.g. 100 normal, 500 during peak]</users>\n<load_time>[Acceptable load time — e.g. under 3 seconds for all pages]</load_time>\n<environment>[Test environment — UAT / Production-like]</environment>\n\nCreate a performance test checklist covering:\n1. Page load time — each key page under threshold\n2. API response time — under 2 seconds\n3. Load test — expected concurrent users\n4. Stress test — behaviour beyond expected load\n5. Spike test — sudden surge of users\n6. Memory and CPU — no leaks under sustained load\n7. Error rate — less than 1% under normal load\n8. Database — no slow queries during load\n9. Recovery — app recovers gracefully after overload\n\nFor each: Scenario | Tool/Method | Pass Criteria | Fail Criteria | Priority`,
+   tip:"Use with JMeter or BlazeMeter — or share checklist with your performance testing team."}
+
+  ,{cat:"Web Application",diff:"easy",title:"Regression test plan",
+   fields:["App name and release version","New features added in this release","Modules changed or fixed in this release","Critical user journeys to always test"],
+   output:"Structured regression test plan with scope, priority areas, test execution order, entry/exit criteria — ready for sprint sign-off and stakeholder review.",
+   prompt:`You are a QA Lead creating a regression test plan for a web application release.\n\n<app>[App name and release version]</app>\n<new_features>[New features in this release]</new_features>\n<changed>[Modules changed or bug fixes applied]</changed>\n<critical_journeys>[Critical user journeys — e.g. Login, Place order, Generate report]</critical_journeys>\n\nCreate a regression test plan covering:\n1. Regression scope — what to test and why\n2. Out of scope — what is excluded and reason\n3. Risk-based priority — High, Medium, Low areas\n4. Test execution order — most critical first\n5. Entry criteria — what must be ready before regression\n6. Exit criteria — what defines regression complete\n7. Test cases by module with estimated effort\n8. Timeline and resource plan\n9. Sign-off checklist\n\nKeep language clear for both technical and non-technical stakeholders.`,
+   tip:"Create this at the start of every sprint — stops regression from being an afterthought."}
+
+  ,{cat:"Insurance",diff:"easy",title:"Insurance policy test cases",
+   fields:["Insurance type (Home / Health / Vehicle / Travel)","Key features (e.g. sum insured, premium, riders, policy term)","User roles (e.g. Customer, Agent, Admin)"],
+   output:"Complete test cases for policy creation, renewal, modification and cancellation — covering all roles, validations, payments and edge cases.",
+   prompt:`You are a senior QA Engineer specialising in insurance domain applications.\n\n<insurance_type>[Insurance type — Home / Health / Vehicle / Travel]</insurance_type>\n<features>[Key features — Sum insured, Premium calculation, Add-on riders, Policy term, Nominee]</features>\n<user_roles>[User roles — Customer, Insurance Agent, Underwriter, Admin]</user_roles>\n<platform>[Platform — Web portal / Mobile app / Agent portal]</platform>\n\nGenerate insurance policy test cases covering:\n1. New policy creation — all mandatory fields, premium calculation\n2. Policy renewal — before expiry, after expiry, with changes\n3. Policy modification — change sum insured, add riders, update nominee\n4. Policy cancellation — within free-look period, after free-look period\n5. Premium payment — UPI, card, net banking, auto-debit\n6. Policy document — correct details, PDF download, email delivery\n7. Role-based access — customer vs agent vs admin permissions\n8. Edge cases — backdated policies, duplicate policies, lapsed policies\n9. Notifications — payment due reminders, renewal alerts\n\nFormat: TC-ID | Feature | User Role | Steps | Expected Result | Priority`,
+   tip:"Works for Home, Health, Vehicle and Travel insurance — just specify the type in the first field."}
+
+  ,{cat:"Insurance",diff:"medium",title:"Insurance claims test cases",
+   fields:["Insurance type (Home / Health / Vehicle / Travel)","Claims process steps in your application","Documents required for claims","Claim approval workflow (Auto-approve / Manual review)"],
+   output:"End-to-end claims test cases — submission, document upload, verification, approval/rejection, and payout — with edge cases and negative scenarios.",
+   prompt:`You are a senior QA Engineer with insurance domain knowledge testing a claims management system.\n\n<insurance_type>[Insurance type — Home / Health / Vehicle / Travel]</insurance_type>\n<claims_steps>[Claims steps — Submit, Upload docs, Surveyor visit, Approval, Payout]</claims_steps>\n<documents>[Required documents — Policy copy, Hospital bills, FIR, Photos, Repair estimates]</documents>\n<workflow>[Approval workflow — Auto-approve below threshold / Manual review / Surveyor required]</workflow>\n\nGenerate claims management test cases covering:\n1. New claim submission — all fields and document upload\n2. Claim for expired policy — must be rejected with clear message\n3. Duplicate claim — same incident submitted twice\n4. Document upload — valid formats, invalid formats, file size limits\n5. Claim status tracking — customer can track progress at every step\n6. Auto-approval — claims below threshold approved instantly\n7. Manual review — claims above threshold routed to assessor\n8. Claim approval — correct payout, notification to customer\n9. Claim rejection — reason clearly communicated\n10. Partial settlement — partial payout with explanation\n\nFormat: TC-ID | Claim Type | Scenario | Steps | Expected Result | Priority`,
+   tip:"Covers full claims lifecycle from submission to payout — critical for insurance client projects."}
+
+  ,{cat:"E-commerce",diff:"easy",title:"Shopping flow test cases",
+   fields:["Platform type (e.g. Flipkart-style, Amazon-style, Meesho reseller, custom store)","Product types sold (e.g. Electronics, Clothing, Groceries)","Payment methods (e.g. UPI, Card, COD, Wallet, EMI)"],
+   output:"End-to-end shopping flow test cases from product search to order confirmation — covering all payment methods, address scenarios, and checkout edge cases.",
+   prompt:`You are a senior QA Engineer specialising in e-commerce application testing.\n\n<platform>[E-commerce type — Flipkart-style marketplace / Amazon-style / Meesho reseller / D2C brand store]</platform>\n<products>[Product types — Electronics, Clothing, Groceries, Books, Fashion]</products>\n<payment>[Payment methods — UPI, Debit/Credit Card, COD, PayTM, PhonePe, EMI, Buy Now Pay Later]</payment>\n<delivery>[Delivery options — Standard, Express, Same-day, Store pickup]</delivery>\n\nGenerate end-to-end shopping flow test cases covering:\n1. Product search — by name, category, brand, filters, sort\n2. Product page — images, price, stock status, ratings, description\n3. Add to cart — single item, multiple items, quantity update\n4. Wishlist — add, remove, move to cart\n5. Apply coupon or promo code — valid, invalid, expired, minimum order\n6. Address — saved address, new address, pincode serviceability\n7. Payment — test each method (UPI, Card, COD, Wallet)\n8. Order confirmation — screen, email and SMS with order ID\n9. Out of stock — during browsing and during checkout\n10. Guest vs logged-in checkout comparison\n\nFormat: TC-ID | Flow Step | Scenario | Test Data | Expected Result | Priority`,
+   tip:"Works for any e-commerce platform — specify if marketplace, D2C or reseller for accurate scenarios."}
+
+  ,{cat:"E-commerce",diff:"easy",title:"Order management & returns",
+   fields:["Platform type (e.g. Flipkart-style, Amazon-style, custom)","Return policy (e.g. 7-day return, no return on electronics)","Refund methods (e.g. original payment, store wallet, bank transfer)"],
+   output:"Complete test cases for order tracking, cancellation, returns, exchanges and refunds — everything a customer experiences after placing an order.",
+   prompt:`You are a senior QA Engineer testing post-order management features for an e-commerce application.\n\n<platform>[Platform — Flipkart-style marketplace / Amazon-style / D2C brand / Custom]</platform>\n<return_policy>[Return policy — e.g. 7-day, 30-day, no return on perishables/innerwear]</return_policy>\n<refund>[Refund methods — Original payment method, Store wallet, Bank account, UPI]</refund>\n<delivery_partner>[Delivery partners — Delhivery, Ekart, BlueDart, Dunzo, self-delivery]</delivery_partner>\n\nGenerate order management and returns test cases covering:\n1. Order tracking — real-time status updates, SMS and email notifications\n2. Order cancellation — before dispatch, after dispatch\n3. Delivery attempts — first attempt, second attempt, return to seller\n4. Return initiation — within policy, outside policy window\n5. Return pickup scheduling — home pickup, drop at store\n6. Refund — correct amount, correct method, within SLA timeline\n7. Exchange request — same product different size, different product\n8. Damaged product — photo upload, immediate replacement or refund\n9. Wrong product — return and replacement flow\n10. Partial delivery — some items delivered, some pending\n\nFormat: TC-ID | Order Stage | Scenario | Steps | Expected Result | Priority`,
+   tip:"Covers every post-order scenario — the most common customer pain points in Indian e-commerce."}
+
+
+  ,{cat:"Test Cases",diff:"easy",title:"Critique AI-generated test cases",
+   fields:["Paste the AI-generated test cases (Claude output)","App or feature name","Domain or module context (e.g. D365, Insurance, E-commerce)"],
+   output:"A critique table showing: hallucinated steps, missing edge cases, wrong assumptions, and test cases that look right but would fail — with Risk Level and Recommended Fix for each.",
+   prompt:`You are a senior QA Engineer reviewing AI-generated test cases before they are used in production.\n\n<app>[App or feature name]</app>\n<domain>[Domain / module context — e.g. D365 Procurement, Insurance Claims, E-commerce Checkout]</domain>\n<generated_test_cases>\n[PASTE THE AI-GENERATED TEST CASES HERE]\n</generated_test_cases>\n\nReview these test cases and identify:\n1. Hallucinated steps — steps that don't reflect how the app actually works\n2. Missing edge cases specific to this domain\n3. Assumptions Claude made that need human validation\n4. Test cases that look correct but would fail in the real environment\n5. Business logic gaps — scenarios only a human who knows the project would catch\n\nReturn a structured critique table:\nIssue | TC-ID | Risk Level (Critical/High/Medium/Low) | What's Wrong | Recommended Fix\n\nEnd with a summary: how many test cases are safe to use, how many need rework, and how many should be discarded.`,
+   tip:"2-min generation + 5-min critique = 7 minutes total. Still beats 90 minutes — but now with a built-in quality gate."}
+
 ];
 
 const DIFF={easy:{lbl:"Beginner friendly",cls:"diff-e"},medium:{lbl:"Intermediate",cls:"diff-m"},hard:{lbl:"Advanced",cls:"diff-h"}};
@@ -365,7 +509,7 @@ function render(){
   renderCats();
   const f=getFilt();
   document.getElementById("rcnt").innerHTML=`<strong>${f.length}</strong> template${f.length!==1?"s":""}`;
-  document.getElementById("hs-t").textContent=DATA.length;
+  // stat is hardcoded in HTML
   const grid=document.getElementById("grid");
   if(!f.length){grid.innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><p style="font-size:15px;font-weight:600;color:#5A5A7A;margin-bottom:4px">No templates found</p><p>Try a different search or category.</p></div>`;return;}
   grid.innerHTML=f.map((d,i)=>{
