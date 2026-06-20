@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Prompt Library — Links</title>
+<meta name="description" content="34 free, copy-paste Claude prompts for QA Engineers. Expert output in 60 seconds — no AI skills needed.">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    min-height:100vh;color:#fff;
+    background:linear-gradient(160deg,#E55A2B 0%,#C2185B 32%,#7C3AED 66%,#0D9488 100%);
+    background-attachment:fixed;
+    display:flex;justify-content:center;
+    padding:48px 20px 60px;
+  }
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 60%);pointer-events:none;}
+  .wrap{width:100%;max-width:480px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;}
+
+  /* Avatar */
+  .avatar{width:96px;height:96px;border-radius:26px;background:linear-gradient(135deg,#E55A2B,#7C3AED);display:flex;align-items:center;justify-content:center;font-size:46px;box-shadow:0 12px 36px rgba(0,0,0,.3);border:3px solid rgba(255,255,255,.4);}
+  .name{display:flex;align-items:center;gap:7px;font-size:25px;font-weight:800;margin-top:18px;}
+  .verified{width:23px;height:23px;}
+  .handle{font-size:15px;font-weight:600;opacity:.85;margin-top:3px;}
+  .tagline{font-size:15.5px;font-weight:500;line-height:1.55;text-align:center;opacity:.95;margin-top:14px;max-width:380px;}
+
+  /* Stat pills */
+  .stats{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center;}
+  .pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:20px;padding:6px 14px;font-size:12.5px;font-weight:700;backdrop-filter:blur(8px);}
+  .pill b{color:#FFD580;}
+
+  /* Links */
+  .links{width:100%;margin-top:30px;display:flex;flex-direction:column;gap:14px;}
+  .lnk{
+    display:flex;align-items:center;gap:14px;
+    background:rgba(255,255,255,.97);color:#1A1A2E;
+    border-radius:16px;padding:17px 20px;
+    font-size:16px;font-weight:700;text-decoration:none;
+    box-shadow:0 6px 20px rgba(0,0,0,.16);
+    transition:transform .15s ease, box-shadow .15s ease;
+    position:relative;
+  }
+  .lnk:active{transform:scale(.98);}
+  .lnk:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.22);}
+  .lnk .ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+  .lnk .tx{flex:1;line-height:1.25;}
+  .lnk .tx small{display:block;font-size:12.5px;font-weight:500;color:#6B6B8A;margin-top:2px;}
+  .lnk .arr{font-size:20px;color:#C4C4D4;font-weight:700;}
+  .lnk.primary{background:linear-gradient(135deg,#1A1A2E,#2D2D52);color:#fff;}
+  .lnk.primary .tx small{color:rgba(255,255,255,.7);}
+  .lnk.primary .arr{color:rgba(255,255,255,.5);}
+  .lnk .hot{position:absolute;top:-9px;right:14px;background:#FFD580;color:#7C2D12;font-size:10.5px;font-weight:900;letter-spacing:.5px;border-radius:8px;padding:3px 9px;box-shadow:0 3px 8px rgba(0,0,0,.2);}
+
+  /* Share row */
+  .share{display:flex;gap:12px;margin-top:26px;}
+  .sbtn{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;backdrop-filter:blur(8px);text-decoration:none;color:#fff;transition:background .15s;}
+  .sbtn:hover{background:rgba(255,255,255,.28);}
+
+  .foot{margin-top:34px;font-size:12.5px;opacity:.7;text-align:center;line-height:1.5;}
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1A1A2E;color:#fff;padding:11px 22px;border-radius:30px;font-size:13.5px;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="avatar">⚡</div>
+    <div class="name">
+      Claude Prompt Library
+      <svg class="verified" viewBox="0 0 24 24" fill="none"><path d="M12 1l2.4 1.8 3 .1.9 2.9 2.4 1.8-.9 2.9.9 2.9-2.4 1.8-.9 2.9-3 .1L12 23l-2.4-1.8-3-.1-.9-2.9L3.3 16.4l.9-2.9-.9-2.9 2.4-1.8.9-2.9 3-.1L12 1z" fill="#FFD580"/><path d="M8 12l2.5 2.5L16 9" stroke="#7C2D12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="handle">QA Engineer Edition</div>
+    <p class="tagline">34 free, copy-paste Claude prompts that turn a blank page into expert-level QA output — in 60 seconds. No AI skills needed.</p>
+
+    <div class="stats">
+      <span class="pill"><b>34</b> Templates</span>
+      <span class="pill"><b>12</b> Categories</span>
+      <span class="pill"><b>~60s</b> to output</span>
+      <span class="pill"><b>100%</b> Free</span>
+    </div>
+
+    <div class="links">
+      <a class="lnk primary" href="https://claudepromptlibrary.vercel.app" target="_blank" rel="noopener">
+        <span class="hot">START HERE</span>
+        <span class="ico" style="background:linear-gradient(135deg,#E55A2B,#7C3AED);">🚀</span>
+        <span class="tx">Open the Prompt Library<small>Browse all 34 templates — free</small></span>
+        <span class="arr">›</span>
+      </a>
+
+      <a class="lnk" href="https://claudepromptlibrary.vercel.app" target="_blank" rel="noopener">
+        <span class="ico" style="background:#FFF0EB;">🧪</span>
+        <span class="tx">Get test cases instantly<small>Functional, edge, regression & more</small></span>
+        <span class="arr">›</span>
+      </a>
+
+      <a class="lnk" href="https://claudepromptlibrary.vercel.app" target="_blank" rel="noopener">
+        <span class="ico" style="background:#F5F3FF;">🤖</span>
+        <span class="tx">Automation & Playwright prompts<small>TypeScript scripts + pipeline debug</small></span>
+        <span class="arr">›</span>
+      </a>
+
+      <a class="lnk" href="https://claudepromptlibrary.vercel.app" target="_blank" rel="noopener">
+        <span class="ico" style="background:#F0FDFA;">📋</span>
+        <span class="tx">Reports, defects & docs<small>Defect reports, RCA, status updates</small></span>
+        <span class="arr">›</span>
+      </a>
+
+      <a class="lnk" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <span class="ico" style="background:#FCE7F3;">📸</span>
+        <span class="tx">Follow for more QA + AI tips<small>New prompts & workflows weekly</small></span>
+        <span class="arr">›</span>
+      </a>
+    </div>
+
+    <div class="share">
+      <a class="sbtn" href="https://api.whatsapp.com/send?text=Free%20Claude%20Prompt%20Library%20for%20QA%20Engineers%20%E2%86%92%20https://claudepromptlibrary.vercel.app" target="_blank" rel="noopener" title="Share on WhatsApp">🟢</a>
+      <a class="sbtn" href="https://www.linkedin.com/sharing/share-offsite/?url=https://claudepromptlibrary.vercel.app" target="_blank" rel="noopener" title="Share on LinkedIn">💼</a>
+      <button class="sbtn" onclick="copyLink()" title="Copy link">🔗</button>
+    </div>
+
+    <p class="foot">Built for QA Engineers · Powered by Claude<br>claudepromptlibrary.vercel.app</p>
+  </div>
+
+  <div class="toast" id="toast">Link copied ✓</div>
+  <script>
+    function copyLink(){
+      navigator.clipboard.writeText('https://claudepromptlibrary.vercel.app').then(function(){
+        var t=document.getElementById('toast');t.classList.add('show');
+        setTimeout(function(){t.classList.remove('show');},1800);
+      });
+    }
+  </script>
+</body>
+</html>
